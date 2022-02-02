@@ -13,8 +13,7 @@ public class Menu {
     }
 
     private int displayMenu(String msg){
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        assistant.cleanConsole();
         if(!(msg.equals("") || msg.equals(" "))){
             System.out.println(msg + "\n\n");
         }
