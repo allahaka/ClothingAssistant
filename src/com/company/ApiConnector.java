@@ -15,7 +15,7 @@ public class ApiConnector {
         int responseCode = con.getResponseCode();
         if(!(responseCode == 200)){
             //TODO: Should be less generic
-            throw new Exception("Something went wrong try again");
+            throw new Exception("Something went wrong try again. ");
         }
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
@@ -24,8 +24,10 @@ public class ApiConnector {
             response.append(inputLine);
         }
         in.close();
-        if(response.isEmpty() || response.toString().equals("{\"data\":[[]]}")){
-            throw new Exception("API responded with empty data");
+        if(response.isEmpty()
+            || response.toString().equals("{\"data\":[[]]}")
+            || response.toString().equals("{}")){
+            throw new Exception("API responded with empty data. ");
         }
         return new JSONObject(response.toString());
     }

@@ -1,5 +1,6 @@
 package com.company;
 
+import java.util.Date;
 import java.util.Scanner;
 
 public class Assistant {
@@ -8,13 +9,25 @@ public class Assistant {
         try {
             location.updateCoordinates();
             Main.LocationsList.add(location);
+            if(location.name.equals("home")){
+                Main.homeLocation = location;
+            }
+            if(location.name.equals("work")){
+                Main.workLocation = location;
+            }
         }catch(Exception e){
-            return e.toString();
+            return e + "Try again in few seconds";
         }
         return "";
     }
 
     public String wearToday() {
+        Forecast forecast = new Forecast(new Date(), Main.homeLocation);
+        try{
+            int weather = forecast.getWeather();
+        }catch (Exception e){
+            return e + "Try again in few seconds";
+        }
         return "";
     }
 
@@ -32,8 +45,19 @@ public class Assistant {
 
     private Location addLocationHelper() {
         cleanConsole();
-        System.out.print("Provide name of the location you want to save: ");
-        String name = getStringInput();
+
+        String name;
+        if(!Menu.hasHomeLocation){
+            System.out.println("Firstly you have to set your home address");
+            name = "home";
+        }else if(!Menu.hasWorkLocation){
+            System.out.println("Firstly you have to set your work address");
+            name = "work";
+        }else{
+            System.out.print("Provide name of the location you want to save: ");
+            name = getStringInput();
+        }
+
         System.out.print("Provide city of your location: ");
         String city = getStringInput();
         System.out.print("Provide a country of the city: ");

@@ -35,5 +35,4 @@ public class Location {
         this.latitude = respArray.getJSONObject(0).getDouble("latitude");
         this.longitude = respArray.getJSONObject(0).getDouble("longitude");
     }
-
 }

@@ -5,10 +5,29 @@ import java.util.Scanner;
 public class Menu {
 
     private final Assistant assistant = new Assistant();
+    private boolean minimumLocationNumber = false;
+    public static boolean hasHomeLocation = false;
+    public static boolean hasWorkLocation = false;
 
-    public void start(String msg) {
+    public void start(String msg){
+        if(!minimumLocationNumber){
+            while(Main.LocationsList.size() < 5){
+                if(!hasWorkLocation || !hasHomeLocation){
+                    for (Location l : Main.LocationsList){
+                        if (l.name.equalsIgnoreCase("home")){
+                            hasHomeLocation = true;
+                        }
+                        if (l.name.equalsIgnoreCase("work")){
+                            hasWorkLocation = true;
+                        }
+                    }
+                }
+                runOption(1);
+            }
+            minimumLocationNumber = true;
+        }
+
         int option = this.displayMenu(msg);
-
         this.runOption(option);
     }
 
@@ -58,6 +77,10 @@ public class Menu {
                 start(result);
             }
             case 6 -> System.exit(0);
+            default -> {
+                System.out.println("Incorrect Option");
+                start("");
+            }
         }
     }
 }
