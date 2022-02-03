@@ -28,27 +28,13 @@ public class Forecast {
         JSONObject wind = new JSONObject(response.getString("wind"));
 
         switch (Range.from(weatherId)){
-            case TWO_HUNDRED -> {
-                finalResult += WeatherTypes.THUNDERSTORM.value;
-            }
-            case THREE_HUNDRED -> {
-                finalResult += WeatherTypes.DRIZZLE.value;
-            }
-            case FIVE_HUNDRED -> {
-                finalResult += WeatherTypes.RAIN.value;
-            }
-            case SIX_HUNDRED -> {
-                finalResult += WeatherTypes.SNOW.value;
-            }
-            case SEVEN_HUNDRED -> {
-                finalResult += WeatherTypes.ATMOSPHERE.value;
-            }
-            case EIGHT_HUNDRED -> {
-                finalResult += WeatherTypes.CLEAR.value;
-            }
-            case EIGHT_HUNDRED_PLUS -> {
-                finalResult += WeatherTypes.CLOUDS.value;
-            }
+            case TWO_HUNDRED -> finalResult += WeatherTypes.THUNDERSTORM.value;
+            case THREE_HUNDRED -> finalResult += WeatherTypes.DRIZZLE.value;
+            case FIVE_HUNDRED -> finalResult += WeatherTypes.RAIN.value;
+            case SIX_HUNDRED -> finalResult += WeatherTypes.SNOW.value;
+            case SEVEN_HUNDRED -> finalResult += WeatherTypes.ATMOSPHERE.value;
+            case EIGHT_HUNDRED -> finalResult += WeatherTypes.CLEAR.value;
+            case EIGHT_HUNDRED_PLUS -> finalResult += WeatherTypes.CLOUDS.value;
         }
 
         double tempRatio = mainObj.getDouble("temp") * mainObj.getInt("humidity");

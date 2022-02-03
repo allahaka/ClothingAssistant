@@ -15,7 +15,7 @@ public enum Range {
     private final int minValue;
     private final int maxValue;
 
-    private Range(int min, int max) {
+    Range(int min, int max) {
         this.minValue = min;
         this.maxValue = max;
     }
