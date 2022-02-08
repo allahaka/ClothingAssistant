@@ -1,10 +1,9 @@
 package com.company;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Location {
-    String API_URL = "http://api.positionstack.com/v1/forward?access_key=" + Main.GEO_DECODE_API_KEY + "&query=";
+    String API_URL = "https://app.geocodeapi.io/api/v1/search?apikey=" + Main.GEO_DECODE_API_KEY + "&text=";
 
     public String name;
     public String country;
@@ -31,8 +30,21 @@ public class Location {
 
     public void updateCoordinates() throws Exception {
         JSONObject response = ApiConnector.getRequest(API_URL + city + ", " + country + ", " + region);
-        JSONArray respArray = response.getJSONArray("data");
-        this.latitude = respArray.getJSONObject(0).getDouble("latitude");
-        this.longitude = respArray.getJSONObject(0).getDouble("longitude");
+        response = response.getJSONArray("features").getJSONObject(0);
+        JSONObject geometry = response.getJSONObject("geometry");
+
+        this.latitude = geometry.getJSONArray("coordinates").getDouble(1);
+        this.longitude = geometry.getJSONArray("coordinates").getDouble(0);
+    }
+
+    public JSONObject getJSONObject(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", this.name);
+        jsonObject.put("country", this.country);
+        jsonObject.put("city", this.city);
+        jsonObject.put("region", this.region);
+        jsonObject.put("latitude", this.latitude);
+        jsonObject.put("longitude", this.longitude);
+        return jsonObject;
     }
 }

@@ -42,8 +42,9 @@ public class Menu {
         System.out.println("2) What should I wear now");
         System.out.println("3) What should I wear tomorrow");
         System.out.println("4) Check the weather at chosen location");
-        System.out.println("5) What should i take with to going to location for the trip");
-        System.out.println("\n6) Exit");
+        System.out.println("5) What should i take with to going to location for the trip\n");
+        System.out.println("6) Save locations");
+        System.out.println("7) Exit");
         System.out.print("Choose the option: ");
         return this.getInput();
     }
@@ -76,7 +77,11 @@ public class Menu {
                 result = this.assistant.plantTrip();
                 start(result);
             }
-            case 6 -> System.exit(0);
+            case 6 -> {
+                result = this.assistant.saveLocations();
+                start(result);
+            }
+            case 7 -> System.exit(0);
             default -> {
                 System.out.println("Incorrect Option");
                 start("");

@@ -17,6 +17,8 @@ public class Main {
         Main.GEO_DECODE_API_KEY = args[0];
         Main.OPEN_WEATHER_API_KEY = args[1];
 
+        Main.LocationsList = Assistant.loadLocations();
+
         Menu menu = new Menu();
         menu.start("");
     }
