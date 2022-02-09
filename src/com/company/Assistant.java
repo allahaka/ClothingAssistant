@@ -23,13 +23,7 @@ public class Assistant {
         Location location = this.addLocationHelper();
         try {
             location.updateCoordinates();
-            Main.LocationsList.add(location);
-            if(location.name.equals("home")){
-                Main.homeLocation = location;
-            }
-            if(location.name.equals("work")){
-                Main.workLocation = location;
-            }
+            addLocationToMain(location);
         }catch(Exception e){
             return e + "Try again in few seconds";
         }
@@ -40,10 +34,10 @@ public class Assistant {
         Forecast forecast = new Forecast(new Date(), Main.homeLocation);
         try{
             int weather = forecast.getWeather();
+            return Wardrobe.whatClothesToUse(weather);
         }catch (Exception e){
             return e + "Try again in few seconds";
         }
-        return "";
     }
 
     public String wearTomorrow() {
@@ -131,41 +125,35 @@ public class Assistant {
         return jsonArray.toString();
     }
 
-    public static List<Location> loadLocations(){
-        List<Location> LocationsList = new ArrayList<>();
+    public static void loadLocations(){
         OsCheck.OSType osType = getOSType();
 
         if(osType == OsCheck.OSType.MacOs){
-            return loadLocationsHelper(MACOS_FILE_LOCATION);
+            loadLocationsHelper(MACOS_FILE_LOCATION);
         }else if(osType == OsCheck.OSType.Windows){
             // Windows hasn't been tested
-            return loadLocationsHelper(WINDOWS_FILE_LOCATION);
+            loadLocationsHelper(WINDOWS_FILE_LOCATION);
         }
-
-        return LocationsList;
     }
 
-    public static List<Location> loadLocationsHelper(String path){
-        List<Location> LocationsList = new ArrayList<>();
-
+    public static void loadLocationsHelper(String path){
         try {
             File file = new File(path);
             String content = FileUtils.readFileToString(file, "utf-8");
             if (!file.exists()) {
-                return LocationsList;
+                return;
             }
             if (content == null) {
-                return LocationsList;
+                return;
             }
 
             JSONArray array = new JSONArray(content);
 
             for (int i = 0; i < array.length(); i++) {
-                LocationsList.add(createLocationFromJson(array.getJSONObject(i)));
+                Location location = createLocationFromJson(array.getJSONObject(i));
+                addLocationToMain(location);
             }
-            return LocationsList;
-        }catch(Exception e){
-            return LocationsList;
+        }catch(Exception ignored){
         }
     }
 
@@ -178,4 +166,15 @@ public class Assistant {
                 obj.getDouble("latitude"),
                 obj.getDouble("longitude"));
     }
+
+    public static void addLocationToMain(Location location){
+        Main.LocationsList.add(location);
+        if(location.name.equals("home")){
+            Main.homeLocation = location;
+        }
+        if(location.name.equals("work")){
+            Main.workLocation = location;
+        }
+    }
+
 }
