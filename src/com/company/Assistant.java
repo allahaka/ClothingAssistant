@@ -52,7 +52,7 @@ public class Assistant {
         }
     }
 
-    public String plantTrip() {
+    public String planATrip() {
         return "";
     }
 

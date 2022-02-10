@@ -5,7 +5,6 @@ import org.json.JSONObject;
 import java.util.Date;
 
 public class Forecast {
-//    String API_URL = "http://api.openweathermap.org/data/2.5/weather";
     String API_URL = "https://api.weatherapi.com/v1/forecast.json?key=";
 
     public Date date;
@@ -66,12 +65,6 @@ public class Forecast {
     }
 
     private JSONObject getWeatherResponse() throws Exception {
-//        String get_url = API_URL
-//                + "?lat=" + location.latitude
-//                + "&lon=" + location.longitude
-//                + "&units=metric"
-//                + "&appid=" + Main.OPEN_WEATHER_API_KEY;
-
         String get_url = API_URL
                 + Main.OPEN_WEATHER_API_KEY
                 + "&q=" + location.latitude

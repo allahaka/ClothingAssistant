@@ -39,7 +39,7 @@ public class Menu {
         System.out.println("What would you like to do? Type the number corresponding to the option.");
         System.out.println("1) Add location");
         System.out.println("2) What should I wear now");
-        System.out.println("3) What should I wear tomorrow");
+        System.out.println("3) What should I wear tomorrow to work");
         System.out.println("4) Check the weather at chosen location");
         System.out.println("5) What should i take with to going to location for the trip\n");
         System.out.println("6) Save locations");
@@ -81,7 +81,7 @@ public class Menu {
                 start(result);
             }
             case 5 -> {
-                result = this.assistant.plantTrip();
+                result = this.assistant.planATrip();
                 start(result);
             }
             case 6 -> {
