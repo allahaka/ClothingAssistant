@@ -183,7 +183,7 @@ public class Assistant {
 
 
     private String possibleClothesToString(ArrayList<String> possibilities) {
-        HashSet<String> uniqueValues = new HashSet<String>(possibilities);
+        HashSet<String> uniqueValues = new HashSet<>(possibilities);
         return String.join(", ", uniqueValues);
     }
 
