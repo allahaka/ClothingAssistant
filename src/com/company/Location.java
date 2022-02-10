@@ -47,4 +47,8 @@ public class Location {
         jsonObject.put("longitude", this.longitude);
         return jsonObject;
     }
+
+    public String toString(){
+        return name + " " + country + " " + region + " " + city + " (" + latitude + ", " + latitude + ")";
+    }
 }

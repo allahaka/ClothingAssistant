@@ -5,6 +5,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.company.Assistant.intToBinary;
+
 public class Wardrobe {
     // List of all clothes as:
     // [String name, int weatherTypes, String type]
@@ -20,10 +22,10 @@ public class Wardrobe {
     //     trip
     private static final String CLOTHES = """
             [
-            ["beanie", 38, "neutral"],
-            ["coat", 39, "neutral"],
+            ["beanie", 7, "neutral"],
+            ["coat", 7, "neutral"],
             ["boot", 7, "neutral"],
-            ["jacket", 39, "neutral"],
+            ["jacket", 7, "neutral"],
             ["scarf", 7, "neutral"],
             ["gloves", 6, "neutral"],
             ["hoodie", 7, "casual"],
@@ -50,7 +52,20 @@ public class Wardrobe {
         }
     }
 
-    public static String whatClothesToUse(int weather){
-        return "";
+    public static ArrayList<String> whatClothesToUse(int weather){
+        ArrayList<String> possibleClothes = new ArrayList<>();
+        String weatherBinary = intToBinary(weather, 4);
+        for(Clothes c: Main.listOfClothes){
+            String cBinary = intToBinary(c.usedWeathers, 4);
+            for(int i=0; i<4; i++) {
+                char clothValue = cBinary.charAt(i);
+                char weatherValue = weatherBinary.charAt(i);
+                if( clothValue == '1' && weatherValue == clothValue){
+                    possibleClothes.add(c.name);
+                    break;
+                }
+            }
+        }
+        return possibleClothes;
     }
 }

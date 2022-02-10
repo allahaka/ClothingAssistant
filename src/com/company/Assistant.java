@@ -7,10 +7,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static com.company.OsCheck.getOSType;
 
@@ -34,7 +31,8 @@ public class Assistant {
         Forecast forecast = new Forecast(new Date(), Main.homeLocation);
         try{
             int weather = forecast.getWeather();
-            return Wardrobe.whatClothesToUse(weather);
+            ArrayList<String> possibilities = Wardrobe.whatClothesToUse(weather);
+            return "You might consider to wear some of this options:\n" + possibleClothesToString(possibilities);
         }catch (Exception e){
             return e + "Try again in few seconds";
         }
@@ -44,8 +42,14 @@ public class Assistant {
         return "";
     }
 
-    public String checkWeather() {
-        return "";
+    public String checkWeather(Location location, int weather) {
+        try{
+            Forecast forecast = new Forecast(new Date(), location);
+
+            return forecast.checkWeather(weather);
+        }catch(Exception e){
+            return e + "Try again later";
+        }
     }
 
     public String plantTrip() {
@@ -177,4 +181,20 @@ public class Assistant {
         }
     }
 
+
+    private String possibleClothesToString(ArrayList<String> possibilities) {
+        HashSet<String> uniqueValues = new HashSet<String>(possibilities);
+        return String.join(", ", uniqueValues);
+    }
+
+    public static String intToBinary(int number, int amountOfBits){
+        StringBuilder binary = new StringBuilder();
+        for(int i=0; i<amountOfBits; i++, number/=2){
+            switch (number % 2) {
+                case 0 -> binary.append("0");
+                case 1 -> binary.append("1");
+            }
+        }
+        return binary.reverse().toString();
+    }
 }

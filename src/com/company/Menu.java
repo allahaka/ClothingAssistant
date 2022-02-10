@@ -36,7 +36,6 @@ public class Menu {
         if(!(msg.equals("") || msg.equals(" "))){
             System.out.println(msg + "\n\n");
         }
-        System.out.println("Welcome in clothing assistant");
         System.out.println("What would you like to do? Type the number corresponding to the option.");
         System.out.println("1) Add location");
         System.out.println("2) What should I wear now");
@@ -70,7 +69,15 @@ public class Menu {
                 start(result);
             }
             case 4 -> {
-                result = this.assistant.checkWeather();
+                System.out.println("Provide the number of location: ");
+                for(int i=0; i<Main.LocationsList.size(); i++){
+                    System.out.println(i + ") " + Main.LocationsList.get(i).toString());
+                }
+                int locationNumber = this.getInput();
+                Location location = Main.LocationsList.get(locationNumber);
+                System.out.println("Provide what time you want to check: (24h system)");
+                int time = this.getInput();
+                result = this.assistant.checkWeather(location, time);
                 start(result);
             }
             case 5 -> {

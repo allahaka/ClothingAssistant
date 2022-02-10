@@ -22,6 +22,6 @@ public class Main {
         Wardrobe.generateListOfClothes();
 
         Menu menu = new Menu();
-        menu.start("");
+        menu.start("Welcome in clothing assistant");
     }
 }
