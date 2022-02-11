@@ -80,7 +80,39 @@ public class Assistant {
     }
 
     public String planATrip() {
-        return "";
+        System.out.println("Provide the number of location for your trip: ");
+        for(int i=0; i<Main.LocationsList.size(); i++){
+            System.out.println(i + ") " + Main.LocationsList.get(i).toString());
+        }
+        int locationNumber = Assistant.getInput();
+        Location location = Main.LocationsList.get(locationNumber);
+        System.out.println("Remember that we can only go forward maximum 15 days.");
+        System.out.println("Try to fit in with your last day before 15 days from today.");
+        System.out.println("What day you plan to go out? (Provide date in yyyy-mm-dd format)");
+        String goDate = getStringInput();
+        System.out.println("What day you plan to come back? (Provide date in yyyy-mm-dd format)");
+        String comeBackDate = getStringInput();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+
+        try{
+            ArrayList<String> allClothes = new ArrayList<>();
+            Forecast forecast = new Forecast(location);
+            c.setTime(sdf.parse(goDate));
+            Date d1 = sdf.parse(goDate);
+            Date d2 = sdf.parse(comeBackDate);
+            long diff = d2.getTime() - d1.getTime();
+            int diffDays = (int)diff / (24 * 60 * 60 * 1000);
+            for(int i=0; i<=diffDays; i++){
+                c.add(Calendar.DAY_OF_WEEK, 1);
+                int weather = forecast.getWeather(sdf.format(c.getTime()));
+                allClothes.addAll(Wardrobe.whatClothesToUse(weather));
+            }
+            return "You might consider packing this clothes:\n" + possibleClothesToString(allClothes);
+        }catch(Exception e){
+            return e + "Try again";
+        }
     }
 
     private Location addLocationHelper() {

@@ -28,6 +28,24 @@ public class Forecast {
         return getWeatherInt(isRaining, isSnowing, temp, humidity);
     }
 
+
+    public int getWeather(String date) throws Exception {
+        JSONObject response = getWeatherResponse(date);
+        int isRaining = response.getJSONObject("forecast").getJSONArray("forecastday")
+                .getJSONObject(0).getJSONArray("hour")
+                .getJSONObject(0).getInt("will_it_rain");
+        int isSnowing = response.getJSONObject("forecast").getJSONArray("forecastday")
+                .getJSONObject(0).getJSONArray("hour")
+                .getJSONObject(0).getInt("will_it_snow");
+        double temp = response.getJSONObject("forecast").getJSONArray("forecastday")
+                .getJSONObject(0).getJSONArray("hour")
+                .getJSONObject(0).getDouble("temp_c");
+        int humidity = response.getJSONObject("forecast").getJSONArray("forecastday")
+                .getJSONObject(0).getJSONArray("hour")
+                .getJSONObject(0).getInt("humidity");
+        return getWeatherInt(isRaining, isSnowing, temp, humidity);
+    }
+
     public int getWeather(String date, int hour) throws Exception {
         JSONObject response = getWeatherResponse(date, hour);
         int isRaining = response.getJSONObject("forecast").getJSONArray("forecastday")
@@ -83,6 +101,9 @@ public class Forecast {
         if(isSnowing == 1){
             weatherForecast += " There is a chance of snow.";
         }
+        if(isRaining == 0 && isSnowing == 0){
+            weatherForecast += " There should be no precipitation.";
+        }
         return weatherForecast;
     }
 
@@ -100,6 +121,15 @@ public class Forecast {
                 + "&q=" + location.latitude
                 + "," + location.longitude
                 + "&hour=" + hour;
+        return ApiConnector.getRequest(get_url);
+    }
+
+    private JSONObject getWeatherResponse(String date) throws Exception {
+        String get_url = API_URL
+                + Main.OPEN_WEATHER_API_KEY
+                + "&q=" + location.latitude
+                + "," + location.longitude
+                + "&dt=" + date;
         return ApiConnector.getRequest(get_url);
     }
 
