@@ -53,7 +53,7 @@ public class Assistant {
             Forecast goOutForecast = new Forecast(Main.homeLocation);
             Forecast comeBackForecast = new Forecast(Main.workLocation);
             int weatherGoOut = goOutForecast.getWeather(tomorrow, goOutTime);
-            int weatherComeBack = goOutForecast.getWeather(tomorrow, goBackTime);
+            int weatherComeBack = comeBackForecast.getWeather(tomorrow, goBackTime);
             ArrayList<String> possibleClothes = Wardrobe.whatClothesToUse(weatherGoOut);
             possibleClothes.addAll(Wardrobe.whatClothesToUse(weatherComeBack));
             return "You might consider to wear some of this options:\n" + possibleClothesToString(possibleClothes);
