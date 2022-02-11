@@ -2,30 +2,52 @@ package com.company;
 
 import org.json.JSONObject;
 
-import java.util.Date;
-
 public class Forecast {
     String API_URL = "https://api.weatherapi.com/v1/forecast.json?key=";
 
-    public Date date;
     public Location location;
 
-    public Forecast(Date date, Location location) {
-        this.date = date;
+    public Forecast(Location location) {
         this.location = location;
     }
 
     public int getWeather() throws Exception {
-        int finalResult = 0;
         JSONObject response = getWeatherResponse();
         int isRaining = response.getJSONObject("forecast").getJSONArray("forecastday")
-                .getJSONObject(0).getJSONObject("day").getInt("daily_will_it_rain");
+                .getJSONObject(0).getJSONObject("day")
+                .getInt("daily_will_it_rain");
         int isSnowing = response.getJSONObject("forecast").getJSONArray("forecastday")
-                .getJSONObject(0).getJSONObject("day").getInt("daily_will_it_snow");
+                .getJSONObject(0).getJSONObject("day")
+                .getInt("daily_will_it_snow");
         double temp = response.getJSONObject("forecast").getJSONArray("forecastday")
-                .getJSONObject(0).getJSONObject("day").getDouble("avgtemp_c");
+                .getJSONObject(0).getJSONObject("day")
+                .getDouble("avgtemp_c");
         int humidity = response.getJSONObject("forecast").getJSONArray("forecastday")
-                .getJSONObject(0).getJSONObject("day").getInt("avghumidity");
+                .getJSONObject(0).getJSONObject("day")
+                .getInt("avghumidity");
+        return getWeatherInt(isRaining, isSnowing, temp, humidity);
+    }
+
+    public int getWeather(String date, int hour) throws Exception {
+        JSONObject response = getWeatherResponse(date, hour);
+        int isRaining = response.getJSONObject("forecast").getJSONArray("forecastday")
+                .getJSONObject(0).getJSONArray("hour")
+                .getJSONObject(0).getInt("will_it_rain");
+        int isSnowing = response.getJSONObject("forecast").getJSONArray("forecastday")
+                .getJSONObject(0).getJSONArray("hour")
+                .getJSONObject(0).getInt("will_it_snow");
+        double temp = response.getJSONObject("forecast").getJSONArray("forecastday")
+                .getJSONObject(0).getJSONArray("hour")
+                .getJSONObject(0).getDouble("temp_c");
+        int humidity = response.getJSONObject("forecast").getJSONArray("forecastday")
+                .getJSONObject(0).getJSONArray("hour")
+                .getJSONObject(0).getInt("humidity");
+        return getWeatherInt(isRaining, isSnowing, temp, humidity);
+    }
+
+    public int getWeatherInt(int isRaining, int isSnowing, double temp, int humidity){
+        int finalResult = 0;
+
 
         if(isRaining == 1){
             finalResult += WeatherTypes.RAIN.value;
@@ -44,8 +66,8 @@ public class Forecast {
         return finalResult;
     }
 
-    public String checkWeather(int weather) throws Exception {
-        JSONObject response = getWeatherResponse(weather);
+    public String checkWeather(int time) throws Exception {
+        JSONObject response = getWeatherResponse(time);
         int isRaining = response.getJSONObject("forecast").getJSONArray("forecastday")
                 .getJSONObject(0).getJSONArray("hour").getJSONObject(0).getInt("will_it_rain");
         int isSnowing = response.getJSONObject("forecast").getJSONArray("forecastday")
@@ -77,6 +99,16 @@ public class Forecast {
                 + Main.OPEN_WEATHER_API_KEY
                 + "&q=" + location.latitude
                 + "," + location.longitude
+                + "&hour=" + hour;
+        return ApiConnector.getRequest(get_url);
+    }
+
+    private JSONObject getWeatherResponse(String date, int hour) throws Exception {
+        String get_url = API_URL
+                + Main.OPEN_WEATHER_API_KEY
+                + "&q=" + location.latitude
+                + "," + location.longitude
+                + "&dt=" + date
                 + "&hour=" + hour;
         return ApiConnector.getRequest(get_url);
     }

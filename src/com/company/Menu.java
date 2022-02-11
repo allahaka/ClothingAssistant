@@ -1,7 +1,5 @@
 package com.company;
 
-import java.util.Scanner;
-
 public class Menu {
 
     private final Assistant assistant = new Assistant();
@@ -37,20 +35,15 @@ public class Menu {
             System.out.println(msg + "\n\n");
         }
         System.out.println("What would you like to do? Type the number corresponding to the option.");
-        System.out.println("1) Add location");
-        System.out.println("2) What should I wear now");
-        System.out.println("3) What should I wear tomorrow to work");
-        System.out.println("4) Check the weather at chosen location");
-        System.out.println("5) What should i take with to going to location for the trip\n");
-        System.out.println("6) Save locations");
+        System.out.println("1) Add location"); // Working
+        System.out.println("2) What should I wear now"); // Working
+        System.out.println("3) What should I wear tomorrow to work"); // Working
+        System.out.println("4) Check the weather at chosen location"); // Working
+        System.out.println("5) What should i take with to going to location for the trip"); // TODO: next
+        System.out.println("6) Save locations"); // Working
         System.out.println("7) Exit");
         System.out.print("Choose the option: ");
-        return this.getInput();
-    }
-
-    private int getInput(){
-        Scanner scan = new Scanner(System.in);
-        return scan.nextInt();
+        return Assistant.getInput();
     }
 
     private void runOption(int option){
@@ -69,15 +62,7 @@ public class Menu {
                 start(result);
             }
             case 4 -> {
-                System.out.println("Provide the number of location: ");
-                for(int i=0; i<Main.LocationsList.size(); i++){
-                    System.out.println(i + ") " + Main.LocationsList.get(i).toString());
-                }
-                int locationNumber = this.getInput();
-                Location location = Main.LocationsList.get(locationNumber);
-                System.out.println("Provide what time you want to check: (24h system)");
-                int time = this.getInput();
-                result = this.assistant.checkWeather(location, time);
+                result = this.assistant.checkWeather();
                 start(result);
             }
             case 5 -> {

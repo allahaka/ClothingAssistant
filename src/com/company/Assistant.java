@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.company.OsCheck.getOSType;
@@ -28,7 +29,7 @@ public class Assistant {
     }
 
     public String wearToday() {
-        Forecast forecast = new Forecast(new Date(), Main.homeLocation);
+        Forecast forecast = new Forecast(Main.homeLocation);
         try{
             int weather = forecast.getWeather();
             ArrayList<String> possibilities = Wardrobe.whatClothesToUse(weather);
@@ -39,14 +40,40 @@ public class Assistant {
     }
 
     public String wearTomorrow() {
-        return "";
+        System.out.println("What time are you going to work: (24h format)");
+        int goOutTime = Assistant.getInput();
+        System.out.println("What time are you coming back: (24h format)");
+        int goBackTime = Assistant.getInput();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_WEEK, 1);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try{
+            String tomorrow = format.format(calendar.getTime());
+            Forecast goOutForecast = new Forecast(Main.homeLocation);
+            Forecast comeBackForecast = new Forecast(Main.workLocation);
+            int weatherGoOut = goOutForecast.getWeather(tomorrow, goOutTime);
+            int weatherComeBack = goOutForecast.getWeather(tomorrow, goBackTime);
+            ArrayList<String> possibleClothes = Wardrobe.whatClothesToUse(weatherGoOut);
+            possibleClothes.addAll(Wardrobe.whatClothesToUse(weatherComeBack));
+            return "You might consider to wear some of this options:\n" + possibleClothesToString(possibleClothes);
+        }catch(Exception e){
+            return e + "Try again later";
+        }
     }
 
-    public String checkWeather(Location location, int weather) {
+    public String checkWeather() {
+        System.out.println("Provide the number of location: ");
+        for(int i=0; i<Main.LocationsList.size(); i++){
+            System.out.println(i + ") " + Main.LocationsList.get(i).toString());
+        }
+        int locationNumber = Assistant.getInput();
+        Location location = Main.LocationsList.get(locationNumber);
+        System.out.println("Provide what time you want to check: (24h system)");
+        int time = Assistant.getInput();
         try{
-            Forecast forecast = new Forecast(new Date(), location);
-
-            return forecast.checkWeather(weather);
+            Forecast forecast = new Forecast(location);
+            return forecast.checkWeather(time);
         }catch(Exception e){
             return e + "Try again later";
         }
@@ -80,16 +107,6 @@ public class Assistant {
         String region = getStringInput();
 
         return new Location(name, city, country, region);
-    }
-
-    private String getStringInput(){
-        Scanner scan = new Scanner(System.in);
-        return scan.next();
-    }
-
-    public void cleanConsole(){
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 
     public String saveLocations() {
@@ -127,6 +144,11 @@ public class Assistant {
             jsonArray.put(l.getJSONObject());
         }
         return jsonArray.toString();
+    }
+
+    private String possibleClothesToString(ArrayList<String> possibilities) {
+        HashSet<String> uniqueValues = new HashSet<>(possibilities);
+        return String.join(", ", uniqueValues);
     }
 
     public static void loadLocations(){
@@ -181,12 +203,6 @@ public class Assistant {
         }
     }
 
-
-    private String possibleClothesToString(ArrayList<String> possibilities) {
-        HashSet<String> uniqueValues = new HashSet<>(possibilities);
-        return String.join(", ", uniqueValues);
-    }
-
     public static String intToBinary(int number, int amountOfBits){
         StringBuilder binary = new StringBuilder();
         for(int i=0; i<amountOfBits; i++, number/=2){
@@ -196,5 +212,20 @@ public class Assistant {
             }
         }
         return binary.reverse().toString();
+    }
+
+    public static int getInput(){
+        Scanner scan = new Scanner(System.in);
+        return scan.nextInt();
+    }
+
+    private String getStringInput(){
+        Scanner scan = new Scanner(System.in);
+        return scan.next();
+    }
+
+    public void cleanConsole(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
